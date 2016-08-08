@@ -1,5 +1,5 @@
 {
-	"name": "zgabievi/promocodes",
+	"name": "trexology/promocodes",
 	"description": "Promotional Codes Generator for Laravel 5.1",
 	"keywords": [
 		"promo code",
@@ -8,12 +8,11 @@
 		"laravel",
 		"php"
 	],
-	"homepage": "https://github.com/zgabievi/promocodes",
+	"homepage": "https://github.com/trexology/promocodes",
 	"license": "MIT",
 	"authors": [
 		{
-			"name": "zgabievi",
-			"email": "zura.gabievi@gmail.com"
+			"name": "trexology"
 		}
 	],
 	"minimum-stability": "dev",
@@ -23,7 +22,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Gabievi\\Promocodes\\": "src/"
+			"Trexology\\Promocodes\\": "src/"
 		}
 	}
 }

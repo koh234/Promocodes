@@ -1,6 +1,6 @@
 <?php
 
-namespace Gabievi\Promocodes\Facades;
+namespace Trexology\Promocodes\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Gabievi\Promocodes;
+namespace Trexology\Promocodes;
 
 use Illuminate\Support\ServiceProvider;
 

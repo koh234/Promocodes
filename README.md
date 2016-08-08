@@ -1,10 +1,10 @@
 # Promocodes
 
-[![PR0M0C0D35](http://i.imgsafe.org/c1512bb.jpg)](https://github.com/zgabievi/promocodes)
+[![PR0M0C0D35](http://i.imgsafe.org/c1512bb.jpg)](https://github.com/trexology/promocodes)
 
-[![Latest Stable Version](https://poser.pugx.org/zgabievi/promocodes/version.png)](https://packagist.org/packages/zgabievi/promocodes)
-[![Total Downloads](https://poser.pugx.org/zgabievi/promocodes/d/total.png)](https://packagist.org/packages/zgabievi/promocodes)
-[![License](https://poser.pugx.org/zgabievi/promocodes/license)](https://packagist.org/packages/zgabievi/promocodes)
+[![Latest Stable Version](https://poser.pugx.org/trexology/promocodes/version.png)](https://packagist.org/packages/trexology/promocodes)
+[![Total Downloads](https://poser.pugx.org/trexology/promocodes/d/total.png)](https://packagist.org/packages/trexology/promocodes)
+[![License](https://poser.pugx.org/trexology/promocodes/license)](https://packagist.org/packages/trexology/promocodes)
 
 Promotional Codes Generator for [Laravel 5.*](http://laravel.com/)
 
@@ -24,7 +24,7 @@ Promotional Codes Generator for [Laravel 5.*](http://laravel.com/)
 
 Run composer command in your terminal.
 
-    composer require zgabievi/promocodes
+    composer require trexology/promocodes
 
 ### Laravel
 
@@ -33,13 +33,13 @@ Please read [Config 'n Migration](#config-n-migration) section first. It's requr
 Open `config/app.php` and find the `providers` key. Add `PromocodesServiceProvider` to the array.
 
 ```php
-Gabievi\Promocodes\PromocodesServiceProvider::class
+Trexology\Promocodes\PromocodesServiceProvider::class
 ```
 
 Find the `aliases` key and add `Facade` to the array. 
 
 ```php
-'Promocodes' => Gabievi\Promocodes\Facades\Promocodes::class
+'Promocodes' => Trexology\Promocodes\Facades\Promocodes::class
 ```
 
 ## Usage

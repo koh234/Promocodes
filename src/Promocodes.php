@@ -1,6 +1,6 @@
 <?php
 
-namespace Gabievi\Promocodes;
+namespace Trexology\Promocodes;
 
 use Illuminate\Support\Facades\DB;
 
@@ -10,7 +10,7 @@ class Promocodes
 	/**
      * Generated codes will be saved here
      * to be validated later
-     * 
+     *
 	 * @var array
 	 */
 	protected $codes = [];
