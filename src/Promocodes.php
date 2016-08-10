@@ -2,9 +2,11 @@
 
 namespace Trexology\Promocodes;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
-class Promocodes
+class Promocodes extends Model
 {
 
 	/**
@@ -13,7 +15,7 @@ class Promocodes
      *
 	 * @var array
 	 */
-	protected $codes = [];
+	// protected $codes = [];
 
 	/**
      * Length of code will be calculated
@@ -25,21 +27,10 @@ class Promocodes
 	protected $length;
 
 	/**
-     * Model of promocodes from your config
-     * will be saved in this variable
-     *
-	 * @var Model
-	 */
-	protected $model;
-
-	/**
 	 * Promocodes constructor.
 	 */
 	public function __construct()
 	{
-		$this->model = app()->make(config('promocodes.model'));
-
-		$this->codes  = $this->model->lists('code')->toArray();
 		$this->length = substr_count(config('promocodes.mask'), '*');
 	}
 
@@ -84,22 +75,30 @@ class Promocodes
 		return $code;
 	}
 
-	/**
-     * Your code will be validted to
-     * be unique for one request
-     *
-	 * @param $collection
-	 * @param $new
-	 *
-	 * @return bool
-	 */
-	public function validate($collection, $new)
+	// /**
+  //    * Your code will be validated to
+  //    * be unique for one request
+  //    *
+	//  * @param $collection
+	//  * @param $new
+	//  *
+	//  * @return bool
+	//  */
+	public function validate($new)
 	{
-		if (count($collection) == 0 && count($this->codes) == 0) return true;
+		// if (count($collection) == 0 && count($this->codes) == 0) return true;
 
-		$combined = array_merge($collection, $this->codes);
+		$count = Promocodes::where('code', $new)->count();
+		if ($count == 0) {
+			return true;
+		}
+		else{
+			return false;
+		}
 
-		return !in_array($new, $combined);
+		// $combined = array_merge($collection, $this->codes);
+		//
+		// return !in_array($new, $combined);
 	}
 
 	/**
@@ -116,7 +115,7 @@ class Promocodes
 		for ($i = 1; $i <= $amount; $i++) {
 			$random = $this->randomize();
 
-			while (!$this->validate($collection, $random)) {
+			while (!$this->validate($random)) {
 				$random = $this->randomize();
 			}
 
@@ -137,19 +136,38 @@ class Promocodes
 	 */
 	public function save($amount = 1, $reward = null)
 	{
-		$data = [];
+		$data = collect([]);
 
 		foreach ($this->generate($amount) as $key => $code) {
-			$data[$key]['code'] = $code;
-			$data[$key]['reward'] = $reward;
+			$promo = new Promocodes();
+			$promo->code = $code;
+			$promo->reward = $reward;
+			$promo->save();
+			$data->push($promo);
 		}
 
-        // if insertion goes well
-        if ($this->model->insert($data)) {
-            return collect($data);
-        } else {
-            return null;
-        }
+		return $data;
+	}
+
+	/**
+		 * Generates promocodes with specific code
+		 *
+	 * @param string $code
+	 * @param double $reward
+	 *
+	 * @return Promocodes / false
+	 */
+	public function saveCodeName($code, $reward = null)
+	{
+		if ($this->validate($code)) {
+			$promo = new Promocodes();
+			$promo->code = $code;
+			$promo->reward = $reward;
+			$promo->save();
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**
@@ -161,11 +179,16 @@ class Promocodes
 	 */
 	public function check($code)
 	{
-		return $this->model->where('code', $code)->where('is_used', false)->count() > 0;
+		return Promocodes::where('code', $code)->whereNull('is_used')->where('quantity', '!=' , 0)
+		->where(function($q) {
+					 $q->whereDate('expiry_date', '<' , Carbon::today())
+						 ->orWhereNull('expiry_date');
+		})
+		->count() > 0;
 	}
 
 	/**
-     * Apply pomocode to user that it's used from now
+     * Apply promocode to user that it's used from now
      *
 	 * @param $code
 	 *
@@ -173,17 +196,22 @@ class Promocodes
 	 */
 	public function apply($code, $hard_check = false)
 	{
-		$row = $this->model->where('code', $code)->where('is_used', false);
-
+		$row = Promocodes::where('code', $code)
+		->whereNull('is_used')
+		->where('quantity', '!=' , 0)
+		->where(function($q) {
+					 $q->whereDate('expiry_date', '<' , Carbon::today())
+						 ->orWhereNull('expiry_date');
+		});
 		//
 		if ($row->count() > 0) {
 			$record = $row->first();
-			$record->is_used = true;
+			if ($record->quantity > 0) {
+				$record->quantity--;
+			}
+			$record->is_used = date('Y-m-d H:i:s');
 
-			//
 			if ($record->save()) {
-
-				//
 				if ($hard_check) {
 					return $record->reward;
 				} else {

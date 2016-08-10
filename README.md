@@ -36,7 +36,7 @@ Open `config/app.php` and find the `providers` key. Add `PromocodesServiceProvid
 Trexology\Promocodes\PromocodesServiceProvider::class
 ```
 
-Find the `aliases` key and add `Facade` to the array. 
+Find the `aliases` key and add `Facade` to the array.
 
 ```php
 'Promocodes' => Trexology\Promocodes\Facades\Promocodes::class
@@ -60,15 +60,10 @@ public $timestamps = false;
 protected $fillable = [
 	'code',
 	'reward',
-	'is_used',
+	'quantity',
+  'is_used',
 ];
 
-/**
- * @var array
- */
-protected $casts = [
-	'is_used' => 'boolean',
-];
 ```
 
 ### Methods
@@ -98,6 +93,19 @@ Promocodes::save(5, 10.50); // $amount = 1, $reward = null
 - **$reward** double - amount of reward of each promocodes
 
 This will generate 5 codes and insert in your DB.
+
+---
+
+You can generate and save codes with the exact name in your database using:
+
+```php
+Promocodes::saveCodeName("OFF1050", 10.50); // $reward = null
+```
+
+- **$code** string - exact promotional code name to be generated
+- **$reward** double - amount of reward of each promocodes
+
+This will return false if code name already existed
 
 ---
 
@@ -143,4 +151,3 @@ Promocodes is an open-sourced laravel package licensed under the MIT license
 
 ## TODO
 - [x] Create migration for vendor publish
-- [ ] Create Promocode Model trait

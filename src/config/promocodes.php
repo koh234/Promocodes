@@ -3,16 +3,10 @@
 return [
 
 	/**
-	 * Promo codes Eloquent model.
-	 *
-	 */
-	'model' => \App\Promocode::class,
-
-	/**
 	 * List of characters, promo code generated from.
 	 *
 	 */
-	'characters' => '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
+	'characters' => '1234567890ABCDEFGHJKLMNPQRSTUVWXYZ',
 
 	/**
 	 * Promo code prefix.
