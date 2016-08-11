@@ -1,6 +1,6 @@
 <?php
 
-namespace Trexology\Promocodes;
+namespace Trexology\Promocodes\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -8,6 +8,16 @@ use Carbon\Carbon;
 
 class Promocodes extends Model
 {
+
+	protected $guarded = [
+    'id','created_at','updated_at'
+  ];
+
+  protected $table = 'promocodes';
+
+  public $rules = [
+    'code' => 'required'
+  ];
 
 	/**
      * Generated codes will be saved here
@@ -32,6 +42,7 @@ class Promocodes extends Model
 	public function __construct()
 	{
 		$this->length = substr_count(config('promocodes.mask'), '*');
+		parent:: __construct();
 	}
 
 	/**
@@ -134,7 +145,7 @@ class Promocodes extends Model
 	 *
 	 * @return static
 	 */
-	public function save($amount = 1, $reward = null)
+	public function generateAndSave($amount = 1, $reward = null)
 	{
 		$data = collect([]);
 
@@ -157,13 +168,12 @@ class Promocodes extends Model
 	 *
 	 * @return Promocodes / false
 	 */
-	public function saveCodeName($code, $reward = null)
+	public function generateCodeName($code, $reward = null)
 	{
 		if ($this->validate($code)) {
-			$promo = new Promocodes();
-			$promo->code = $code;
-			$promo->reward = $reward;
-			$promo->save();
+			$this->code = $code;
+			$this->reward = $reward;
+			$this->save();
 		}
 		else{
 			return false;

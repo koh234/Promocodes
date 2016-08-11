@@ -4,7 +4,7 @@ namespace Trexology\Promocodes\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Promocodes extends Facade {
+class PromocodesFacade extends Facade {
 
 	/**
 	 * Get the registered name of the component.

@@ -31,10 +31,18 @@ class PromocodesServiceProvider extends ServiceProvider
 			__DIR__ . '/config/promocodes.php', 'promocodes'
 		);
 
-		$this->app['promocodes'] = $this->app->share(
-			function () {
-				return new Promocodes();
-			}
-		);
+		$this->app->bind('promocodes', function ($app) {
+			return new Model\Promocodes;
+		});
+
 	}
+
+	// /**
+	//  * Get the services provided by the provider.
+	//  *
+	//  * @return array
+	//  */
+	// public function provides() {
+	// 	return ['promocodes'];
+	// }
 }
