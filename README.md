@@ -86,7 +86,7 @@ This method will return array of codes with 5 element
 You can generate and save codes instantly in your database using:
 
 ```php
-Promocodes::save(5, 10.50); // $amount = 1, $reward = null
+Promocodes::generateAndSave(5, 10.50); // $amount = 1, $reward = null
 ```
 
 - **$amount** int - number of promotional codes to be generated
@@ -99,7 +99,10 @@ This will generate 5 codes and insert in your DB.
 You can generate and save codes with the exact name in your database using:
 
 ```php
-Promocodes::saveCodeName("OFF1050", 10.50); // $reward = null
+Example:
+
+Promocodes::generateCodeName("OFF20%", 0.2); // $reward = null (percentage discount)
+Promocodes::generateCodeName("5SGDOFF", 5); // $reward = null (dollar discount)
 ```
 
 - **$code** string - exact promotional code name to be generated
