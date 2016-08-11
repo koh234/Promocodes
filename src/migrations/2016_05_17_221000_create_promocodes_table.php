@@ -19,7 +19,7 @@ class CreatePromocodesTable extends Migration {
 			$table->double('reward', 10, 2)->nullable();
 			$table->integer('quantity')->default(-1);
 			$table->dateTime('expiry_date')->nullable();
-			$table->dateTime('is_used')->nullable();
+			// $table->dateTime('is_used')->nullable();
 			$table->timestamps();
 		});
 	}

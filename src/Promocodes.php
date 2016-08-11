@@ -179,7 +179,9 @@ class Promocodes extends Model
 	 */
 	public function check($code)
 	{
-		return Promocodes::where('code', $code)->whereNull('is_used')->where('quantity', '!=' , 0)
+		return Promocodes::where('code', $code)
+		// ->whereNull('is_used')
+		->where('quantity', '!=' , 0)
 		->where(function($q) {
 					 $q->whereDate('expiry_date', '<' , Carbon::today())
 						 ->orWhereNull('expiry_date');
@@ -196,20 +198,20 @@ class Promocodes extends Model
 	 */
 	public function apply($code, $hard_check = false)
 	{
-		$row = Promocodes::where('code', $code)
-		->whereNull('is_used')
-		->where('quantity', '!=' , 0)
+		$record = Promocodes::where('code', $code)
+		// ->whereNull('is_used')
+		->where('quantity', '!=' , 0) // -1 for infinite
 		->where(function($q) {
 					 $q->whereDate('expiry_date', '<' , Carbon::today())
 						 ->orWhereNull('expiry_date');
-		});
+		})
+		->first();
 		//
-		if ($row->count() > 0) {
-			$record = $row->first();
+		if ($record) {
 			if ($record->quantity > 0) {
 				$record->quantity--;
 			}
-			$record->is_used = date('Y-m-d H:i:s');
+			// $record->is_used = date('Y-m-d H:i:s');
 
 			if ($record->save()) {
 				if ($hard_check) {
