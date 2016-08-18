@@ -174,6 +174,7 @@ class Promocodes extends Model
 			$this->code = $code;
 			$this->reward = $reward;
 			$this->save();
+			return $this;
 		}
 		else{
 			return false;
